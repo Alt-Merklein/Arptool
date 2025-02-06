@@ -1,16 +1,20 @@
 from scapy.all import *
 import json
 from config import Config
+from services.mail import Mailer
 import threading
-
+from utils import get_time_string
 
 arptable : dict = {}
 
 conf.sniff_promisc = True
 
 config = Config("config.yaml")
+mailer = Mailer(config)
+
 arpfile = config.config["log"]["arp_table"]
 INTERFACE = config.config["network"]["sniff_iface"]
+
 logging.info("==========PROGRAM RESTART==========")
 
 #load dict from json
@@ -51,6 +55,9 @@ def arp_display(pkt : Packet):
         else:
             #Different IP for the same MAC
             logging.warning(f"Different IP for same MAC. New ip is {pkt[ARP].psrc}. Old entry was {pkt[ARP].hwsrc} : {arptable[pkt[ARP].hwsrc]}")
+            mailer.set_subject("Arpspoof - potential threat")
+            mailer.set_text_body(f"You are receiving this email because Arpspoof has detected a potential anomaly on your network at {get_time_string()}. Please check session logs for further information")
+            mailer.send_mail()
         return
 
 
