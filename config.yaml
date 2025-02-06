@@ -1,0 +1,16 @@
+# The interface you want to monitor
+network:
+  sniff_iface: eth1
+
+log:
+  arp_table: ./data/arp_table.json
+  log_file: ./data/session_logs.log
+  options:
+    log_repeated: False
+    log_saves: False
+
+# Your data here
+mail:
+  sender_email: sender@example.com
+  sender_password: password
+  receiver_email: receiver@example.com
