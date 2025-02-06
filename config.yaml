@@ -7,3 +7,7 @@ log:
   options:
     log_repeated: False
     log_saves: False
+
+mail:
+  email: 
+  password: 
